@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Rio - Versão PPT</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background:#e0f2f1; padding:10px; margin:0; }
+        .container { max-width: 600px; margin: auto; }
+        
+        /* BOX LARANJA PRINCIPAL */
+        .box-principal { 
+            background: linear-gradient(180deg, #f39c12 0%, #ffb818 100%); 
+            padding: 20px; border-radius: 15px; border: 2px solid #d35400;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin-bottom: 15px;
+            text-align: center; color: white;
+        }
+
+        .grupos-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 15px; }
+        .bicho-badge { 
+            background: white; color: #d35400; padding: 10px 15px; 
+            border-radius: 25px; font-weight: 900; position: relative; 
+            min-width: 70px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .selo-cruz { 
+            position: absolute; top: -8px; right: -5px; background: #e67e22; 
+            color: white; font-size: 8px; padding: 2px 5px; border-radius: 5px; border: 1px solid white;
+        }
+
+        /* DATA E CRUZ */
+        .barra-cruz {
+            background: #e0f7fa; padding: 12px; border-radius: 10px; 
+            text-align: center; margin-bottom: 15px; border: 1px solid #b2ebf2; 
+            font-weight: bold; color: #00796b; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+
+        /* BOXES DE ENTRADA */
+        .box-entrada { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 15px; }
+        h3 { color: #1a73e8; font-size: 1.1em; margin-bottom: 10px; text-align: center; }
+        
+        textarea { width: 100%; height: 70px; border: 1px solid #ddd; border-radius: 10px; padding: 10px; box-sizing: border-box; font-size: 14px; margin-bottom: 8px; }
+        select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 8px; font-weight: bold; }
+        
+        /* BOTÕES */
+        .btn-azul { background: #1a73e8; color: white; border: none; padding: 14px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
+        .btn-ciano { background: #17a2b8; color: white; border: none; padding: 12px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
+        .btn-roxo { background: #6f42c1; color: white; border: none; padding: 14px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
+        .btn-backup { background: #2ecc71; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; flex: 1; }
+        .btn-restaurar { background: #95a5a6; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; flex: 1; }
+
+        /* MONITORES */
+        .monitor-box { padding: 8px; border-radius: 8px; text-align: center; color: white; font-weight: bold; font-size: 0.8em; margin-top:10px; }
+        .cor-atrasado { background: #e67e22; }
+        .lista-txt { background: #f8f9fa; padding: 8px; border-radius: 8px; font-size: 0.8em; margin-top: 5px; text-align: center; min-height: 25px;}
+
+        /* GRADE E DESTAQUE */
+        .grade-horarios { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .card-h { background: #fff; border: 1px solid #eee; padding: 10px; border-radius: 12px; text-align: center; transition: 0.3s; }
+        
+        .proximo-horario { 
+            border: 3px solid #f1c40f !important; 
+            box-shadow: 0 0 15px rgba(241, 196, 15, 0.6);
+            background: #fffdf0;
+            animation: pulsar 1.5s infinite;
+        }
+        @keyframes pulsar {
+            0% { border-color: #f1c40f; }
+            50% { border-color: #d35400; }
+            100% { border-color: #f1c40f; }
+        }
+
+        .prev-label { color: #6f42c1; font-weight: 900; font-size: 1.1em; display: block; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <center><h2 style="color:#1a73e8;">📊 Sistema de Projeção Rio</h2></center>
+
+    <div class="box-principal">
+        <span style="font-size: 0.8em; font-weight: bold; text-transform: uppercase;">🎯 GRUPOS PROJETADOS</span>
+        <div class="grupos-container" id="painelBadges"></div>
+        <div id="cruzTexto" style="margin-top:15px; font-size:0.85em; text-align:left; background:rgba(255,255,255,0.15); padding:10px; border-radius:10px;"></div>
+    </div>
+
+    <div class="barra-cruz">
+        🗓️ Data: <input type="date" id="dataInput">
+        <span style="color:#d35400;">CRUZ: 8 - 1 - 4 - 7</span>
+    </div>
+
+    <div class="box-entrada">
+        <h3>📖 1º Passo: Lançar Milhares</h3>
+        <select id="selH1">
+            <option value="PPT">PPT (09:20h)</option>
+            <option value="PTM">PTM (11:20h)</option>
+            <option value="PT">PT (14:20h)</option>
+            <option value="PTV">PTV (16:20h)</option>
+            <option value="PTN">PTN (18:20h)</option>
+            <option value="COR">COR (21:20h)</option>
+        </select>
+        <textarea id="milsInput" placeholder="Cole as milhares aqui..."></textarea>
+        <button class="btn-azul" onclick="addMils()">Atualizar Quadro</button>
+        <button class="btn-ciano" onclick="limparDia()">🧹 Limpar Lançamentos do Dia</button>
+    </div>
+
+    <div class="box-entrada">
+        <h3>🔗 2º Passo: Atrasados Geral</h3>
+        <textarea id="geralInput" placeholder="Cole a lista geral aqui..."></textarea>
+        <button class="btn-azul" onclick="addGeral()">Vincular Lista Geral</button>
+        <div class="monitor-box cor-atrasado">⚠️ TOP 5 ATRASADOS (COM DIAS)</div>
+        <div id="displayAtrasados" class="lista-txt">-</div>
+    </div>
+
+    <div class="box-entrada">
+        <h3>🎯 3º Passo: Previsão 1º ao 5º</h3>
+        <textarea id="input1a5" placeholder="Cole a lista 1-5 deste horário..."></textarea>
+        <button class="btn-roxo" onclick="add1a5()">Vincular ao Horário Selecionado Acima</button>
+    </div>
+
+    <div class="box-entrada">
+        <h3>📅 Resumo e Previsão 1º ao 5º</h3>
+        <div class="grade-horarios" id="resumoFinal"></div>
+        
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button class="btn-backup" onclick="exportarBackup()">📥 Salvar Backup</button>
+            <button class="btn-restaurar" onclick="importarBackup()">📤 Restaurar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let db = {
+    mils: { PPT:[], PTM:[], PT:[], PTV:[], PTN:[], COR:[] },
+    geral: { hoje:[], ontem:[], listaCompleta:[] },
+    h1a5: { PPT:[], PTM:[], PT:[], PTV:[], PTN:[], COR:[] }
+};
+
+const hProgramados = { PPT: 9, PTM: 11, PT: 14, PTV: 16, PTN: 18, COR: 21 };
+
+function addMils() {
+    const input = document.getElementById('milsInput');
+    const h = document.getElementById('selH1').value;
+    const m = input.value.match(/\d{4}/g);
+    if(m) db.mils[h] = m.slice(0,7);
+    input.value = ""; 
+    refresh();
+}
+
+function addGeral() {
+    const input = document.getElementById('geralInput');
+    const linhas = input.value.split(/\d+º/);
+    db.geral = { hoje:[], ontem:[], listaCompleta:[] };
+    linhas.forEach(l => {
+        const b = l.match(/-\s*([A-Za-zÀ-ú]+)/);
+        if(!b) return;
+        const nome = b[1].trim();
+        if(l.includes("hoje")) db.geral.hoje.push(nome);
+        else if(l.includes("ontem")) db.geral.ontem.push(nome);
+        else if(l.includes("atrasado há")) {
+            const dias = l.match(/atrasado há\s*(\d+\s*dias)/);
+            db.geral.listaCompleta.push(`${nome} (${dias ? dias[1] : ''})`);
+        }
+    });
+    input.value = ""; 
+    refresh();
+}
+
+function add1a5() {
+    const input = document.getElementById('input1a5');
+    const h = document.getElementById('selH1').value;
+    const linhas = input.value.split(/\d+º/);
+    let temp = [];
+    linhas.forEach(l => {
+        const b = l.match(/-\s*([A-Za-zÀ-ú]+)/);
+        if(b) temp.push(b[1].trim());
+    });
+    db.h1a5[h] = temp;
+    input.value = ""; 
+    refresh();
+}
+
+function refresh() {
+    document.getElementById('displayAtrasados').innerText = db.geral.listaCompleta.slice(0,5).join(' | ') || "-";
+
+    const painel = document.getElementById('painelBadges');
+    const filtrados = db.geral.listaCompleta.filter(item => {
+        const nome = item.split(' ')[0];
+        return !db.geral.hoje.includes(nome) && !db.geral.ontem.includes(nome);
+    }).slice(0,6);
+    painel.innerHTML = filtrados.map(item => `<div class="bicho-badge">${item.split(' ')[0]} <span class="selo-cruz">CRUZ</span></div>`).join('');
+
+    const quadro = document.getElementById('resumoFinal');
+    quadro.innerHTML = '';
+    
+    const agora = new Date().getHours();
+    let proximoIdentificado = false;
+
+    Object.keys(db.mils).forEach(h => {
+        let sug = "---";
+        if(db.h1a5[h].length > 0) {
+            sug = db.h1a5[h].find(b => !db.geral.hoje.includes(b)) || db.h1a5[h][0];
+        }
+
+        let isNext = false;
+        if(!proximoIdentificado && hProgramados[h] > agora) {
+            isNext = true; proximoIdentificado = true;
+        }
+
+        quadro.innerHTML += `
+            <div class="card-h ${isNext ? 'proximo-horario' : ''}">
+                <b>${h} ${isNext ? '🔔' : ''}</b><br>
+                <small style="font-size:0.7em; color:#888;">${db.mils[h].join(' · ') || '...'}</small>
+                <div style="margin-top:5px; border-top:1px dashed #ddd; padding-top:5px;">
+                    <span class="prev-label">${sug}</span>
+                </div>
+            </div>`;
+    });
+    localStorage.setItem('rio_v_final_ppt', JSON.stringify(db));
+}
+
+function exportarBackup() {
+    const data = JSON.stringify(db);
+    const blob = new Blob([data], {type: 'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = 'backup_rio.json'; a.click();
+}
+
+function importarBackup() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.onchange = e => {
+        const reader = new FileReader();
+        reader.onload = event => { db = JSON.parse(event.target.result); refresh(); };
+        reader.readAsText(e.target.files[0]);
+    };
+    input.click();
+}
+
+function limparDia() { if(confirm("Limpar dia?")) { localStorage.removeItem('rio_v_final_ppt'); location.reload(); } }
+
+window.onload = () => {
+    const salvo = localStorage.getItem('rio_v_final_ppt');
+    if(salvo) { db = JSON.parse(salvo); refresh(); }
+    document.getElementById('dataInput').valueAsDate = new Date();
+};
+</script>
+</body>
+</html>
